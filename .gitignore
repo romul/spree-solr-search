@@ -1,0 +1,3 @@
+solr
+log/*.log
+tmp/pids/*
