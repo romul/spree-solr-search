@@ -14,7 +14,8 @@ class SolrSearchExtension < Spree::Extension
   
   def activate
     require 'acts_as_solr'
-    
+    require 'solr_pagination'
+
     Product.class_eval do
       acts_as_solr :fields => [:name, :description]
     end

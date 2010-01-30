@@ -2,10 +2,11 @@ module Spree::Search
   class Solr < Spree::Search::Base
     # method should return hash with conditions {:conditions=> "..."} for Product model
     def get_products_conditions_for(query)
-      result = Product.find_by_solr(query)
+      count = Product.count_by_solr(query)
+      products = Product.paginate_all_by_solr(query, :page => page, 
+                  :per_page => per_page, :total_entries => count)
 
-      @properties[:products] = result.records
-
+      @properties[:products] = products
       {:conditions=> ["products.id IN (?)", products.map(&:id)]}
     end
 
