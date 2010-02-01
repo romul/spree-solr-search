@@ -8,7 +8,7 @@ module ActsAsSolr
   module PaginationExtension
 
     def find_all_by_solr(query, options)
-      find_by_solr(query, options).records
+      Spree::Config.searcher.products.slice(options[:offset], options[:limit])
     end
 
   end

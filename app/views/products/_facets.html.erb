@@ -1,0 +1,13 @@
+<% facets = Spree::Config.searcher.facets || {"facet_fields" => {}} %>
+<% facets["facet_fields"].each do |name, options| %>
+  <% name = name.sub("_facet", "") %>
+  <h4><%= name %></h4>
+  <ul>
+  <% options.each do |value, count| %>
+    <li>
+      <%= link_to value, :overwrite_params => params.merge({:facets => {name => value}}) %>
+      (<%= count %>)
+    </li>
+  <% end %>
+  </ul>
+<% end %>
