@@ -1,11 +1,19 @@
-<% facets = Spree::Config.searcher.facets || {"facet_fields" => {}} %>
-<% facets["facet_fields"].each do |name, options| %>
-  <% name = name.sub("_facet", "") %>
-  <h4><%= name %></h4>
+<% 
+facets = Spree::Config.searcher.facets || {"facet_fields" => {}} 
+facets["facet_fields"].each do |name, options| 
+  options = options.select{|value, count| count > 0}
+  next if options.size <= 1
+%>
+  <h4><%= t name %></h4>
   <ul>
   <% options.each do |value, count| %>
     <li>
-      <%= link_to value, :overwrite_params => params.merge({:facets => {name => value}}) %>
+      <%
+      name = name.sub('_facet', '')
+      facets_hash = params[:facets] || {}
+      facets_hash = facets_hash.merge({name => ["\"#{value}\"", facets_hash[name]].join(',')})
+      -%>
+      <%= link_to value, :overwrite_params => params.merge({:facets => facets_hash}) %>
       (<%= count %>)
     </li>
   <% end %>

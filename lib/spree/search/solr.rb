@@ -4,7 +4,7 @@ module Spree::Search
     def get_products_conditions_for(query)
       facets = {
           :fields => [:price_range, :taxon_names],
-          :browse => @properties[:facets_hash].map{|k,v| "#{k}:\"#{v}\""}  
+          :browse => @properties[:facets_hash].map{|k,v| "#{k}:#{v}"}  
       }
       result = Product.find_by_solr(query, :facets => facets)
       @properties[:products] = result.records
