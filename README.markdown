@@ -14,6 +14,10 @@ To perform the indexing:
 
     rake solr:reindex
 
+or
+
+    Product.rebuild_solr_index
+
 To start Solr demo-server:
 
     rake solr:start
@@ -25,3 +29,7 @@ To stop Solr demo-server:
 To configure production Solr server:
 
     edit RAILS_ROOT/config/solr.yml
+
+P.S. For development recommended use [jetty-solr](http://github.com/dcrec1/jetty-solr) server.
+
+

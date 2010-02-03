@@ -10,13 +10,13 @@ module Spree::Search
       if order_by_price
         search_options.merge!(:order => (order_by_price == 'descend') ? "price desc" : "price asc")
       end
-      query += " AND is_active:(true)"
+      full_query = query + " AND is_active:(true)"
       if taxon 
         taxons_query = taxon.self_and_descendants.map{|t| "taxon_ids:(#{t.id})"}.join(" OR ")
-        query += " AND (#{taxons_query})"
+        full_query += " AND (#{taxons_query})"
       end
 
-      result = Product.find_by_solr(query, search_options)
+      result = Product.find_by_solr(full_query, search_options)
       @properties[:products] = result.records
       count = result.records.size
 
@@ -25,6 +25,11 @@ module Spree::Search
 
       @properties[:products] = products
 
+      if suggest = result.try(:suggest)
+        suggest.sub!(/\sAND.*/, '')
+        @properties[:suggest] = suggest if suggest != query
+      end
+      
       @properties[:facets] = result.facets
       {:conditions=> ["products.id IN (?)", products.map(&:id)]}
     end
