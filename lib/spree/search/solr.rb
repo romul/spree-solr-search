@@ -24,10 +24,13 @@ module Spree::Search
                   :page => page, :per_page => per_page, :total_entries => count)
 
       @properties[:products] = products
-
-      if suggest = result.try(:suggest)
+      
+      begin
+      if suggest = result.suggest
         suggest.sub!(/\sAND.*/, '')
         @properties[:suggest] = suggest if suggest != query
+      end
+      rescue
       end
       
       @properties[:facets] = result.facets
