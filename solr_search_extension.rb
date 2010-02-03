@@ -17,7 +17,8 @@ class SolrSearchExtension < Spree::Extension
     require 'solr_pagination'
 
     Product.class_eval do
-      acts_as_solr  :fields => [:name, :description, :is_active, :taxon_ids, :price_range, :taxon_names],
+      acts_as_solr  :fields => [:name, :description, :is_active, {:price => :float}, 
+                                :taxon_ids, :price_range, :taxon_names],
                     :facets=>[:price_range, :taxon_names]
 
 
