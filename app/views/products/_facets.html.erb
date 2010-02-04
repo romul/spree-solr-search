@@ -1,7 +1,6 @@
 <% 
 facets = Spree::Config.searcher.facets || {"facet_fields" => {}} 
-facets["facet_fields"].each do |name, options| 
-  options = options.select{|value, count| count > 0}
+facets["facet_fields"].each do |name, options|
   next if options.size <= 1
 %>
   <h4><%= t name %></h4>

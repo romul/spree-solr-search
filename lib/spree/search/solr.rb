@@ -4,9 +4,10 @@ module Spree::Search
     def get_products_conditions_for(query)
       facets = {
           :fields => [:price_range, :taxon_names],
-          :browse => @properties[:facets_hash].map{|k,v| "#{k}:#{v}"}  
+          :browse => @properties[:facets_hash].map{|k,v| "#{k}:#{v}"},
+          :zeros => false 
       }
-      search_options = {:facets => facets}
+      search_options = {:facets => facets, :limit => 25000, :lazy => true}
       if order_by_price
         search_options.merge!(:order => (order_by_price == 'descend') ? "price desc" : "price asc")
       end
