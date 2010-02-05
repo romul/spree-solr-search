@@ -55,6 +55,10 @@ class SolrSearchExtension < Spree::Extension
       
     end
     
+    Spree::BaseController.class_eval do
+      helper :solr
+    end
+    
     Spree::Config.searcher = Spree::Search::Solr.new
   end
 end

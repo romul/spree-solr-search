@@ -1,20 +1,17 @@
 <% 
-facets = Spree::Config.searcher.facets || {"facet_fields" => {}} 
-facets["facet_fields"].each do |name, options|
-  next if options.size <= 1
+facets = Spree::Config.searcher.facets || []
+  taxon_names = @taxon ? @taxon.self_and_descendants.map(&:name) : []
+  for facet in facets 
+    options = facet.options.sort{|x,y| y.count <=> x.count} 
+    unless options.empty? %>
+      <h4><%= t "#{facet.name}_facet" %></h4>
+      <ul><%
+        for option in options %>
+          <li>
+            <%= link_to_facet(facet.name, option.name, option.count) %>
+          </li><%
+        end %> 
+      </ul><%
+    end
+  end 
 %>
-  <h4><%= t name %></h4>
-  <ul>
-  <% options.each do |value, count| %>
-    <li>
-      <%
-      name = name.sub('_facet', '')
-      facets_hash = params[:facets] || {}
-      facets_hash = facets_hash.merge({name => ["\"#{value}\"", facets_hash[name]].join(',')})
-      -%>
-      <%= link_to value, :overwrite_params => params.merge({:facets => facets_hash}) %>
-      (<%= count %>)
-    </li>
-  <% end %>
-  </ul>
-<% end %>
