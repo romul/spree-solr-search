@@ -12,15 +12,12 @@ Solr Search
 
 To perform the indexing:
 
-    rake solr:reindex
+    rake solr:reindex BATCH=500
 
-or
-
-    Product.rebuild_solr_index
 
 To start Solr demo-server:
 
-    rake solr:start
+    rake solr:start SOLR_PATH="/home/roman/www/jetty-solr"
 
 To stop Solr demo-server:
 
