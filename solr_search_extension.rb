@@ -21,10 +21,10 @@ class SolrSearchExtension < Spree::Extension
     
     Product.class_eval do
       acts_as_solr  :fields => [:name, :description, :is_active, {:price => :float}, 
-                                :taxon_ids, :price_range, :taxon_names],
-                                #:brand_option, :color_option, :size_option],
-                    :facets=>[:price_range, :taxon_names]
-                              #:brand_option, :color_option, :size_option]
+                                :taxon_ids, :price_range, :taxon_names,
+                                :brand_option, :color_option, :size_option],
+                    :facets=>[:price_range, :taxon_names,
+                              :brand_option, :color_option, :size_option]
 
       def taxon_ids
         taxons.map(&:id)
