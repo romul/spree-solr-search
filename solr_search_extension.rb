@@ -21,10 +21,10 @@ class SolrSearchExtension < Spree::Extension
     
     Product.class_eval do
       acts_as_solr  :fields => [:name, :description, :is_active, {:price => :float}, 
-                                :taxon_ids, :price_range, :taxon_names,
-                                :brand_option, :color_option, :size_option],
-                    :facets=>[:price_range, :taxon_names,
-                              :brand_option, :color_option, :size_option]
+                                :taxon_ids, :price_range, :taxon_names],
+                                #:brand_option, :color_option, :size_option],
+                    :facets=>[:price_range, :taxon_names]
+                              #:brand_option, :color_option, :size_option]
 
       def taxon_ids
         taxons.map(&:id)
@@ -73,7 +73,7 @@ class SolrSearchExtension < Spree::Extension
       def get_option_values(option_name)
         option = options.detect{|option| option.option_type.name == option_name}
         return [] if option.nil? 
-        values = variants.map{|v| v.option_values.select{|ov| ov.option_type_id == option.option_type_id}.map(&:name) }
+        values = variants.map{|v| v.option_values.select{|ov| ov.option_type_id == option.option_type_id}.map(&:presentation) }
         values.flatten.uniq      
       end
     end
