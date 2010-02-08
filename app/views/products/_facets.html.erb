@@ -2,7 +2,8 @@
 facets = Spree::Config.searcher.facets || []
   taxon_names = @taxon ? @taxon.self_and_descendants.map(&:name) : []
   for facet in facets 
-    options = facet.options.sort{|x,y| y.count <=> x.count} 
+    options = facet.options
+    options = options.sort{|x,y| y.count <=> x.count} unless facet.name == "price_range"
     unless options.empty? %>
       <h4><%= t "#{facet.name}_facet" %></h4>
       <ul><%

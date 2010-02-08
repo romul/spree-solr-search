@@ -51,11 +51,19 @@ module Spree::Search
     
     def parse_facets_hash(facets_hash = {"facet_fields" => {}})
       facets = []
+      price_ranges = YAML::load(Spree::Config[:product_price_ranges])
       facets_hash["facet_fields"].each do |name, options|
         next if options.size <= 1
         facet = Facet.new(name.sub('_facet', ''))
-        options.each do |value, count|
-          facet.options << FacetOption.new(value, count)
+        if name == 'price_range_facet'
+          price_ranges.each do |price_range|           
+            count = options[price_range]
+            facet.options << FacetOption.new(price_range, count) if count
+          end
+        else
+          options.each do |value, count|
+            facet.options << FacetOption.new(value, count)
+          end
         end
         facets << facet
       end

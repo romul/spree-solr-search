@@ -16,11 +16,13 @@ class SolrSearchExtension < Spree::Extension
     require 'acts_as_solr'
     require 'solr_pagination'
 
+    Spree::Config.set(:product_price_ranges => 
+                      ["Under $25", "$25 to $50", "$50 to $100", "$100 to $200", "$200 and above"])
+    
     Product.class_eval do
       acts_as_solr  :fields => [:name, :description, :is_active, {:price => :float}, 
                                 :taxon_ids, :price_range, :taxon_names],
                     :facets=>[:price_range, :taxon_names]
-
 
       def taxon_ids
         taxons.map(&:id)
@@ -39,17 +41,18 @@ class SolrSearchExtension < Spree::Extension
       end
       
       def price_range
+        price_ranges = Spree::Config[:product_price_ranges]
         case price
-          when 0..15
-            "Under $15"
-          when 15..20
-            "$15 to $20"
-          when 20..100
-            "$20 to $100"
+          when 0..25
+            price_ranges[0]
+          when 25..50
+            price_ranges[1]
+          when 50..100
+            price_ranges[2]
           when 100..200
-            "$100 to $200"
+            price_ranges[3]
           else
-            "$200 & Above"
+            price_ranges[4]
         end
       end
       
