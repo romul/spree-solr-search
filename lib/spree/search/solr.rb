@@ -3,7 +3,7 @@ module Spree::Search
     # method should return hash with conditions {:conditions=> "..."} for Product model
     def get_products_conditions_for(query)
       facets = {
-          :fields => [:price_range, :taxon_names],
+          :fields => [:price_range, :taxon_names, :brand_option, :color_option, :size_option],
           :browse => @properties[:facets_hash].map{|k,v| "#{k}:#{v}"},
           :zeros => false 
       }

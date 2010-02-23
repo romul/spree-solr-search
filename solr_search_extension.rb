@@ -71,10 +71,16 @@ class SolrSearchExtension < Spree::Extension
       end
       
       def get_option_values(option_name)
-        option = options.detect{|option| option.option_type.name == option_name}
-        return [] if option.nil? 
-        values = variants.map{|v| v.option_values.select{|ov| ov.option_type_id == option.option_type_id}.map(&:presentation) }
-        values.flatten.uniq      
+        sql = <<-eos
+          SELECT DISTINCT ov.id, ov.presentation
+          FROM option_values AS ov
+          LEFT JOIN option_types AS ot ON (ov.option_type_id = ot.id)
+          LEFT JOIN option_values_variants AS ovv ON (ovv.option_value_id = ov.id)
+          LEFT JOIN variants AS v ON (ovv.variant_id = v.id)
+          LEFT JOIN products AS p ON (v.product_id = p.id)
+          WHERE (ot.name = '#{option_name}' AND p.id = #{self.id});
+        eos
+        OptionValue.find_by_sql(sql).map(&:presentation)     
       end
     end
     
