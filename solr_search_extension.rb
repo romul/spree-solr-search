@@ -9,7 +9,7 @@ class SolrSearchExtension < Spree::Extension
   # Please use solr_search/config/routes.rb instead for extension routes.
 
   def self.require_gems(config)
-    config.gem "acts_as_solr_reloaded", :version => '>=1.4.0'
+    config.gem "acts_as_solr_reloaded", :version => '1.4.0'
   end
   
   def activate
