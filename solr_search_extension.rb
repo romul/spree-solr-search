@@ -22,9 +22,9 @@ class SolrSearchExtension < Spree::Extension
     Product.class_eval do
       acts_as_solr  :fields => [:name, :description, :is_active, {:price => :float}, 
                                 :taxon_ids, :price_range, :taxon_names,
-                                :brand_option, :color_option, :size_option],
+                                :brand_property, :color_option, :size_option],
                     :facets=>[:price_range, :taxon_names,
-                              :brand_option, :color_option, :size_option]
+                              :brand_property, :color_option, :size_option]
 
       def taxon_ids
         taxons.map(&:id)
@@ -58,8 +58,10 @@ class SolrSearchExtension < Spree::Extension
         end
       end
       
-      def brand_option
-        get_option_values('brand')
+      def brand_property
+        pp = ProductProperty.first(:joins => :property, 
+              :conditions => {:product_id => self.id, :properties => {:name => 'brand'}})
+        pp ? pp.value : ''
       end
 
       def color_option
