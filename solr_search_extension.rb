@@ -88,8 +88,12 @@ class SolrSearchExtension < Spree::Extension
     
     Spree::BaseController.class_eval do
       helper :solr
+      before_filter :set_searcher
+      
+      private
+      def set_searcher
+        Spree::Config.searcher = Spree::Search::Solr.new
+      end
     end
-    
-    Spree::Config.searcher = Spree::Search::Solr.new
   end
 end
