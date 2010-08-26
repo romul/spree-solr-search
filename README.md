@@ -3,10 +3,12 @@ Solr Search
 
 ### Installation
 
-1. `script/extension install git://github.com/romul/spree-solr-search.git`
-1. Copy `solr_search/config/solr.yml` to `RAILS_ROOT/config/solr.yml`
+1. Add `gem "spree_solr_search"` to your Gemfile
+1. Run `bundle install`
+1. Run `rails g spree_solr_search:install`
 
-**NOTE:** This extension works only with Spree 0.9.99 and higher.
+**NOTE:** Master branch works only with Spree 0.30.x. 
+If you want use this extension with Spree 0.10.x or 0.11.x, then you should use spree-0-11-stable branch
     
 ### Usage
 

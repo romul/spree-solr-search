@@ -21,7 +21,7 @@ module Spree::Search
       @properties[:products] = result.records
       count = result.records.size
 
-      products = Product.paginate_all_by_solr(query,
+      products = Product.paginate(query, :finder => 'find_all_by_solr',
                   :page => page, :per_page => per_page, :total_entries => count)
 
       @properties[:products] = products
