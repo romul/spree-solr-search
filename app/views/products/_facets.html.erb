@@ -1,5 +1,5 @@
 <% 
-facets = Spree::Config.searcher.facets || []
+facets = @searcher.facets || []
   taxon_names = @taxon ? @taxon.self_and_descendants.map(&:name) : []
   for facet in facets 
     options = facet.options

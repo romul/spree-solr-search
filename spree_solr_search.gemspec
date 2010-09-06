@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{spree_solr_search}
-  s.version = "0.30.0.beta1"
+  s.version = "0.30.0.beta2"
 
   s.required_rubygems_version = Gem::Requirement.new("> 1.3.1") if s.respond_to? :required_rubygems_version=
   s.authors = ["Roman Smirnov"]
-  s.date = %q{2010-08-26}
+  s.date = %q{2010-09-06}
   s.description = %q{Provides search via Apache Solr for a Spree store.}
   s.email = %q{roman@railsdog.com}
   s.extra_rdoc_files = [
@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
     ".gitignore",
      "README.md",
      "Rakefile",
+     "VERSION",
      "app/controllers/spree/base_controller_decorator.rb",
      "app/helpers/solr_helper.rb",
      "app/models/product_decorator.rb",
@@ -29,7 +30,6 @@ Gem::Specification.new do |s|
      "config/locales/ru.yml",
      "lib/generators/spree_solr_search/install_generator.rb",
      "lib/generators/templates/solr.yml",
-     "lib/solr_pagination.rb",
      "lib/spree/search/solr.rb",
      "lib/spree_solr_search.rb",
      "lib/spree_solr_search_hooks.rb",

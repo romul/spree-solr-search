@@ -5,9 +5,8 @@ module SpreeSolrSearch
   class Engine < Rails::Engine
     def self.activate
       require 'acts_as_solr'
-      require 'solr_pagination'   
       ENV['RAILS_ENV'] = Rails.env
-
+      Spree::Config.searcher_class = Spree::Search::Solr
       Spree::Config.set(:product_price_ranges => 
            ["Under $25", "$25 to $50", "$50 to $100", "$100 to $200", "$200 and above"])
 
