@@ -50,6 +50,7 @@ module Spree::Search
       facets = []
       price_ranges = YAML::load(Spree::Config[:product_price_ranges])
       facets_hash["facet_fields"].each do |name, options|
+        options = Hash[*options.flatten] if options.is_a?(Array)
         next if options.size <= 1
         facet = Facet.new(name.sub('_facet', ''))
         if name == 'price_range_facet'

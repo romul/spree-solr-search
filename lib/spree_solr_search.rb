@@ -4,7 +4,7 @@ require 'spree_solr_search_hooks'
 module SpreeSolrSearch
   class Engine < Rails::Engine
     def self.activate
-      require 'acts_as_solr'
+      require 'websolr_acts_as_solr'
       ENV['RAILS_ENV'] = Rails.env
       
       if Spree::Config.instance
