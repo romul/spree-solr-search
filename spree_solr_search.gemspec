@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{spree_solr_search}
-  s.version = "0.30.0"
+  s.version = "0.40.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Roman Smirnov"]
-  s.date = %q{2011-01-11}
+  s.date = %q{2011-02-22}
   s.description = %q{Provides search via Apache Solr for a Spree store.}
   s.email = %q{roman@railsdog.com}
   s.extra_rdoc_files = [
@@ -34,6 +34,7 @@ Gem::Specification.new do |s|
      "lib/spree_solr_search.rb",
      "lib/spree_solr_search_hooks.rb",
      "lib/tasks/acts_as_solr.rake",
+     "lib/websolr_acts_as_solr.rb",
      "spree_solr_search.gemspec"
   ]
   s.homepage = %q{http://github.com/romul/spree-solr-search}
@@ -47,15 +48,15 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<spree_core>, [">= 0.30.0"])
-      s.add_runtime_dependency(%q<acts_as_solr_reloaded>, [">= 1.4.0"])
+      s.add_runtime_dependency(%q<spree_core>, [">= 0.30.1"])
+      s.add_runtime_dependency(%q<acts_as_solr_reloaded>, [">= 1.5.0"])
     else
-      s.add_dependency(%q<spree_core>, [">= 0.30.0"])
-      s.add_dependency(%q<acts_as_solr_reloaded>, [">= 1.4.0"])
+      s.add_dependency(%q<spree_core>, [">= 0.30.1"])
+      s.add_dependency(%q<acts_as_solr_reloaded>, [">= 1.5.0"])
     end
   else
-    s.add_dependency(%q<spree_core>, [">= 0.30.0"])
-    s.add_dependency(%q<acts_as_solr_reloaded>, [">= 1.4.0"])
+    s.add_dependency(%q<spree_core>, [">= 0.30.1"])
+    s.add_dependency(%q<acts_as_solr_reloaded>, [">= 1.5.0"])
   end
 end
 
