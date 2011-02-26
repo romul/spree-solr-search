@@ -1,6 +1,6 @@
 Product.class_eval do
   acts_as_solr  :fields => [:name, :description, :is_active, {:price => :float}, 
-                            :taxon_ids, :price_range, :taxon_names,
+                            :taxon_ids, :price_range, :taxon_names, :store_ids,
                             :brand_property, :color_option, :size_option],
                 :facets=>[:price_range, :taxon_names,
                           :brand_property, :color_option, :size_option]
@@ -16,6 +16,14 @@ Product.class_eval do
   end
   
   private
+  
+  def store_ids
+    if self.respond_to? :stores
+      stores.map(&:id)
+    else
+      []
+    end
+  end
   
   def taxon_names
     taxons.map(&:name)

@@ -1,5 +1,5 @@
 module Spree::Search
-  class Solr < Spree::Search::Base
+  class Solr < defined?(Spree::Search::MultiDomain) ? Spree::Search::MultiDomain :  Spree::Search::Base
     protected
 
     def get_products_conditions_for(base_scope, query)
@@ -17,6 +17,8 @@ module Spree::Search
         taxons_query = taxon.self_and_descendants.map{|t| "taxon_ids:(#{t.id})"}.join(" OR ")
         full_query += " AND (#{taxons_query})"
       end
+      
+      full_query += " AND store_ids:(#{current_store_id})" if current_store_id
 
       result = Product.find_by_solr(full_query, search_options)
 
