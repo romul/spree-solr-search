@@ -9,8 +9,6 @@ module SpreeSolrSearch
       
       if Spree::Config.instance
         Spree::Config.searcher_class = Spree::Search::Solr
-        Spree::Config.set(:product_price_ranges => 
-           ["Under $25", "$25 to $50", "$50 to $100", "$100 to $200", "$200 and above"])
       end
 
       Dir.glob(File.join(File.dirname(__FILE__), "../app/**/*_decorator*.rb")) do |c|

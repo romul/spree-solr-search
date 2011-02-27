@@ -4,7 +4,7 @@ module Spree::Search
 
     def get_products_conditions_for(base_scope, query)
       facets = {
-          :fields => [:price_range, :taxon_names, :brand_property, :color_option, :size_option],
+          :fields => PRODUCT_SOLR_FACETS,
           :browse => @properties[:facets_hash].map{|k,v| "#{k}:#{v}"},
           :zeros => false 
       }
@@ -50,20 +50,12 @@ module Spree::Search
     
     def parse_facets_hash(facets_hash = {"facet_fields" => {}})
       facets = []
-      price_ranges = YAML::load(Spree::Config[:product_price_ranges])
       facets_hash["facet_fields"].each do |name, options|
         options = Hash[*options.flatten] if options.is_a?(Array)
         next if options.size <= 1
         facet = Facet.new(name.sub('_facet', ''))
-        if name == 'price_range_facet'
-          price_ranges.each do |price_range|           
-            count = options[price_range]
-            facet.options << FacetOption.new(price_range, count) if count
-          end
-        else
-          options.each do |value, count|
-            facet.options << FacetOption.new(value, count)
-          end
+        options.each do |value, count|
+          facet.options << FacetOption.new(value, count)
         end
         facets << facet
       end

@@ -1,9 +1,5 @@
 Product.class_eval do
-  acts_as_solr  :fields => [:name, :description, :is_active, {:price => :float}, 
-                            :taxon_ids, :price_range, :taxon_names, :store_ids,
-                            :brand_property, :color_option, :size_option],
-                :facets=>[:price_range, :taxon_names,
-                          :brand_property, :color_option, :size_option]
+  acts_as_solr  :fields => PRODUCT_SOLR_FIELDS, :facets => PRODUCT_SOLR_FACETS
 
   def taxon_ids
     taxons.map(&:id)
@@ -30,19 +26,12 @@ Product.class_eval do
   end
   
   def price_range
-    price_ranges = YAML.load(Spree::Config[:product_price_ranges])
-    case price
-      when 0..25
-        price_ranges[0]
-      when 25..50
-        price_ranges[1]
-      when 50..100
-        price_ranges[2]
-      when 100..200
-        price_ranges[3]
-      else
-        price_ranges[4]
+    max = 0
+    PRODUCT_PRICE_RANGES.each do |range, name|
+      return name if range.include?(price)
+      max = range.max if range.max > max
     end
+    I18n.t(:price_and_above, :price => max)
   end
   
   def brand_property

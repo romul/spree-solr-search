@@ -4,3 +4,4 @@ en:
   brand_property_facet: "Brand"
   color_option_facet: "Color"
   size_option_facet: "Size"
+  price_and_above: "$%{price} and above"
