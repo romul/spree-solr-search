@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{spree_solr_search}
-  s.version = "0.40.1"
+  s.version = "0.40.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Roman Smirnov"]
-  s.date = %q{2011-02-26}
+  s.date = %q{2011-02-27}
   s.description = %q{Provides search via Apache Solr for a Spree store.}
   s.email = %q{roman@railsdog.com}
   s.extra_rdoc_files = [
@@ -24,6 +24,7 @@ Gem::Specification.new do |s|
      "app/models/product_decorator.rb",
      "app/views/products/_facets.html.erb",
      "app/views/products/_suggestion.html.erb",
+     "config/initializers/solr_config.rb",
      "config/locales/en.yml",
      "config/locales/ru-RU.yml",
      "config/locales/ru.yml",
