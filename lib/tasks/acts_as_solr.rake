@@ -8,3 +8,17 @@ begin
 rescue LoadError
   puts "WARNING: acts_as_solr_reloaded gem appears to be unavailable.  Please install with bundle install."
 end
+
+namespace :solr do
+  task :optimize => :environment do
+    acts_as_solr_lib_path = $LOAD_PATH.find{|path| path =~ /acts_as_solr_reloaded/ }
+    require File.expand_path("#{acts_as_solr_lib_path}/../config/solr_environment")
+    begin
+      puts "Optimizing..."
+      Product.solr_optimize
+    rescue Errno::ECONNREFUSED
+      puts "Can't run optimizing, b/c Solr server is unavailable."
+    end
+  end
+end
+
