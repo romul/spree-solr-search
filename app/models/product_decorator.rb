@@ -1,16 +1,33 @@
 Product.class_eval do
-  acts_as_solr  :fields => PRODUCT_SOLR_FIELDS, :facets => PRODUCT_SOLR_FACETS
+  acts_as_solr :fields => PRODUCT_SOLR_FIELDS, :facets => PRODUCT_SOLR_FACETS
 
   def taxon_ids
     taxons.map(&:id)
   end
   
   def is_active
-    !deleted_at && 
+    !deleted_at && available_on && 
       (available_on <= Time.zone.now) && 
         (Spree::Config[:allow_backorders] || count_on_hand > 0)
   end
   
+  # saves product to the Solr index
+  def solr_save
+    return true if indexing_disabled?
+    if evaluate_condition(:if, self)
+      if defined? Delayed::Job 
+        Delayed::Job.enqueue SolrManager.new("solr_save", self, configuration[:auto_commit])
+      else  
+        debug "solr_save: #{self.class.name} : #{record_id(self)}"
+        solr_add to_solr_doc
+        solr_commit if configuration[:auto_commit]        
+      end
+      true
+    else
+      solr_destroy
+    end
+  end
+
   private
   
   def store_ids
