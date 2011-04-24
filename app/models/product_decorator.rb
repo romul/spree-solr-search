@@ -1,5 +1,5 @@
 Product.class_eval do
-  acts_as_solr :fields => PRODUCT_SOLR_FIELDS, :facets => PRODUCT_SOLR_FACETS
+  acts_as_solr :fields => PRODUCT_SOLR_FIELDS, :facets => PRODUCT_SOLR_FACETS rescue nil
 
   def taxon_ids
     taxons.map(&:id)
