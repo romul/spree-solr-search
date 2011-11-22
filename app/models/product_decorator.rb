@@ -16,11 +16,11 @@ Product.class_eval do
     return true if indexing_disabled?
     if evaluate_condition(:if, self)
       if defined? Delayed::Job 
-        Delayed::Job.enqueue SolrManager.new("solr_save", self, configuration[:auto_commit])
+        Delayed::Job.enqueue SolrManager.new("solr_save", self, Spree::Config[:solr_auto_commit])
       else  
         debug "solr_save: #{self.class.name} : #{record_id(self)}"
         solr_add to_solr_doc
-        solr_commit if configuration[:auto_commit]        
+        solr_commit if Spree::Config[:solr_auto_commit]
       end
       true
     else
