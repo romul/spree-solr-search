@@ -1,4 +1,4 @@
-Product.class_eval do
+Spree::Product.class_eval do
   acts_as_solr :fields => PRODUCT_SOLR_FIELDS, :facets => PRODUCT_SOLR_FACETS rescue nil
 
   def taxon_ids
@@ -16,11 +16,11 @@ Product.class_eval do
     return true if indexing_disabled?
     if evaluate_condition(:if, self)
       if defined? Delayed::Job 
-        Delayed::Job.enqueue SolrManager.new("solr_save", self, Spree::Config[:solr_auto_commit])
+        Delayed::Job.enqueue SolrManager.new("solr_save", self, Spree::SolrSearch::Config[:auto_commit])
       else  
         debug "solr_save: #{self.class.name} : #{record_id(self)}"
         solr_add to_solr_doc
-        solr_commit if Spree::Config[:solr_auto_commit]
+        solr_commit if Spree::SolrSearch::Config[:auto_commit]
       end
       true
     else
@@ -52,8 +52,8 @@ Product.class_eval do
   end
   
   def brand_property
-    pp = ProductProperty.first(:joins => :property, 
-          :conditions => {:product_id => self.id, :properties => {:name => 'brand'}})
+    pp = Spree::ProductProperty.first(:joins => :property, 
+          :conditions => {:product_id => self.id, :spree_properties => {:name => 'brand'}})
     pp ? pp.value : ''
   end
 
@@ -68,13 +68,13 @@ Product.class_eval do
   def get_option_values(option_name)
     sql = <<-eos
       SELECT DISTINCT ov.id, ov.presentation
-      FROM option_values AS ov
-      LEFT JOIN option_types AS ot ON (ov.option_type_id = ot.id)
-      LEFT JOIN option_values_variants AS ovv ON (ovv.option_value_id = ov.id)
-      LEFT JOIN variants AS v ON (ovv.variant_id = v.id)
-      LEFT JOIN products AS p ON (v.product_id = p.id)
+      FROM spree_option_values AS ov
+      LEFT JOIN spree_option_types AS ot ON (ov.option_type_id = ot.id)
+      LEFT JOIN spree_option_values_variants AS ovv ON (ovv.option_value_id = ov.id)
+      LEFT JOIN spree_variants AS v ON (ovv.variant_id = v.id)
+      LEFT JOIN spree_products AS p ON (v.product_id = p.id)
       WHERE (ot.name = '#{option_name}' AND p.id = #{self.id});
     eos
-    OptionValue.find_by_sql(sql).map(&:presentation)     
+    Spree::OptionValue.find_by_sql(sql).map(&:presentation)     
   end
 end

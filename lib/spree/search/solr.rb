@@ -1,5 +1,5 @@
 module Spree::Search
-  class Solr < defined?(Spree::Search::MultiDomain) ? Spree::Search::MultiDomain :  Spree::Search::Base
+  class Solr < defined?(Spree::Core::Search::MultiDomain) ? Spree::Core::Search::MultiDomain :  Spree::Core::Search::Base
     protected
 
     def get_products_conditions_for(base_scope, query)
@@ -20,10 +20,9 @@ module Spree::Search
       
       full_query += " AND store_ids:(#{current_store_id})" if current_store_id
 
-      result = Product.find_by_solr(full_query, search_options)
+      result = Spree::Product.find_by_solr(full_query, search_options)
 
-      count = result.records.size
-      products = result.records.paginate(:page => page, :per_page => per_page, :total_entries => count)
+      products = result.records
 
       @properties[:products] = products
       @properties[:suggest] = nil
@@ -34,15 +33,15 @@ module Spree::Search
       end
       rescue
       end
-      
+
       @properties[:facets] = parse_facets_hash(result.facets)
-      base_scope.where ["products.id IN (?)", products.map(&:id)]
+      base_scope.where(["spree_products.id IN (?)", products.map(&:id)])
     end
 
     def prepare(params)
       super
       @properties[:facets_hash] = params[:facets] || {}
-      @properties[:manage_pagination] = true
+      @properties[:manage_pagination] = false
       @properties[:order_by_price] = params[:order_by_price]
     end
     
