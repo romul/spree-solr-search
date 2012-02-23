@@ -15,28 +15,7 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files = [
     "README.md"
   ]
-  s.files = [
-    ".gitignore",
-     "README.md",
-     "Rakefile",
-     "VERSION",
-     "app/helpers/spree/base_helper_decorator.rb",
-     "app/models/product_decorator.rb",
-     "app/views/products/_facets.html.erb",
-     "app/views/products/_suggestion.html.erb",
-     "config/initializers/solr_config.rb",
-     "config/locales/en.yml",
-     "config/locales/ru-RU.yml",
-     "config/locales/ru.yml",
-     "lib/generators/spree_solr_search/install_generator.rb",
-     "lib/generators/templates/solr.yml",
-     "lib/spree/search/solr.rb",
-     "lib/spree_solr_search.rb",
-     "lib/spree_solr_search_hooks.rb",
-     "lib/tasks/acts_as_solr.rake",
-     "lib/websolr_acts_as_solr.rb",
-     "spree_solr_search.gemspec"
-  ]
+  s.files = `git ls-files`.split("\n")
   s.homepage = %q{http://github.com/romul/spree-solr-search}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
