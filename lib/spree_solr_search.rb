@@ -5,6 +5,8 @@ end
 
 module SpreeSolrSearch
   class Engine < Rails::Engine
+    engine_name 'spree_solr_search'
+    
     initializer "spree.solr_search.preferences", :after => "spree.environment" do |app|
       Spree::SolrSearch::Config = Spree::SolrSearchConfiguration.new
       Spree::Config.searcher_class = Spree::Search::Solr

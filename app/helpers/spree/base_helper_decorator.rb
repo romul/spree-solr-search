@@ -6,4 +6,11 @@ Spree::BaseHelper.module_eval do
       request.params.delete(:page)
       link_to("#{value} (#{count})", url_for(request.params.merge({:facets => facets_hash})))
   end
+
+  # hate to clutter up teh BaseHelper with this one-time
+  def sort_by_options_list
+  	# generate <options></options> list
+  	options = ::PRODUCT_SORT_FIELDS.map { |k, v| [t(k), url_for(request.params.merge({:sort => k}))] }
+  	options_for_select(options, url_for(request.params.merge({ :sort => params[:sort] || ::PRODUCT_SORT_FIELDS.keys.first })))
+  end
 end

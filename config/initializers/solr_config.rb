@@ -11,3 +11,14 @@ unless defined?(PRODUCT_SOLR_FACETS)
   PRODUCT_SOLR_FACETS = [:price_range, :taxon_names,
                         :brand_property, :color_option, :size_option]
 end
+
+unless defined?(PRODUCT_SORT_FIELDS)
+	PRODUCT_SORT_FIELDS = {
+	    "price_asc" => ["spree_variants.price", "asc"],
+	    "price_desc" => ["spree_variants.price", "desc"],
+	    "date_asc" => ["spree_products.available_on", "asc"],
+	    "date_desc" => ["spree_products.available_on", "desc"],
+	    "name_asc" => ["spree_products.name", "asc"],
+	    "name_desc" => ["spree_products.name", "desc"]
+    }
+end
