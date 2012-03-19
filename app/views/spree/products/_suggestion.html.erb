@@ -1,5 +1,5 @@
 <% if suggestion = @searcher.suggest %>
-  <p>
+  <p class="search-results-suggestion">
     <%= t(:did_you_mean, :default => "Did you mean") %> 
     <%= link_to h(suggestion), url_for(request.params.merge({:keywords => suggestion})) %>?
   </p>
