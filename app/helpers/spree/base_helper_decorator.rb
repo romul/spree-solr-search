@@ -7,7 +7,7 @@ Spree::BaseHelper.module_eval do
       link_to("#{value} (#{count})", url_for(request.params.merge({:facets => facets_hash})))
   end
 
-  # hate to clutter up teh BaseHelper with this one-time
+  # hate to clutter up the BaseHelper with this one-time
   def sort_by_options_list
   	# generate <options></options> list
   	options = ::PRODUCT_SORT_FIELDS.map { |k, v| [t(k), url_for(request.params.merge({:sort => k}))] }
