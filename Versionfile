@@ -1,5 +1,4 @@
-"1.0.x" => { :branch => "master" }
 "0.11.x" => { :branch => "spree-0-11-stable" }
-"0.30.x" => { :branch => "master" }
-"0.40.x" => { :branch => "master" }
-"0.50.x" => { :branch => "master" }
+"0.50.x" => { :branch => "0-60-stable" }
+"0.60.x" => { :branch => "0-60-stable" }
+"1.0.x" => { :branch => "master" }
