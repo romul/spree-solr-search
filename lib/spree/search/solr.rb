@@ -13,7 +13,7 @@ module Spree::Search
       }
 
       # adding :scores => true here should return relevance scoring, but the underlying acts_as_solr library seems broken
-      search_options = {:facets => facets, :limit => 25000, :lazy => true}
+      search_options = {:facets => facets, :lazy => true}
 
       # the order option does not work... it generates the solr query request correctly
       # but the returned result.records are not ordered correctly
@@ -35,14 +35,16 @@ module Spree::Search
       full_query += " AND store_ids:(#{current_store_id})" if current_store_id
 
       # Rails.logger.info "Solr Query: #{full_query}\nOptions: #{search_options}"
-
+      search_options.merge!(:page => page, :per_page => per_page)
       result = Spree::Product.find_by_solr(full_query, search_options)
 
       products = result.records
 
       # Rails.logger.info "Solr Response: #{result.records}"
 
-      @properties[:products] = products
+      @count = result.total
+      @properties[:total_entries] = @count
+      @properties[:products] = result.records
       @properties[:suggest] = nil
       begin
         if suggest = result.suggest
