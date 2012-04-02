@@ -9,8 +9,8 @@ facets = @searcher.facets || []
       options = options.sort{|x, y| y.count <=> x.count}
     end
     unless options.empty? %>
-      <h4><%= t "#{facet.name}_facet" %></h4>
-      <ul><%
+      <h6 class="taxonomy-root"><%= t "#{facet.name}_facet" %></h6>
+      <ul class="taxons-list"><%
         for option in options %>
           <li>
             <%= link_to_facet(facet.name, option.name, option.count) %>
