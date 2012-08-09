@@ -3,7 +3,7 @@ Solr Search
 
 ### Installation
 
-1. add `gem 'acts_as_solr_reloaded', :git => 'git://github.com/evrone/acts_as_solr_reloaded.git', :branch => "ar_namespace_support"` to your Gemfile
+1. add `gem 'acts_as_solr_reloaded', :git => 'git://github.com/dcrec1/acts_as_solr_reloaded.git'` to your Gemfile
 1. Add `gem "spree_solr_search", :git => 'git://github.com/romul/spree-solr-search.git'` to your Gemfile
 1. Run `bundle install`
 1. Run `rails g spree_solr_search:install`
