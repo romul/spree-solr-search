@@ -32,7 +32,7 @@ module Spree::Search
         full_query += " AND (#{taxons_query})"
       end
       
-      full_query += " AND store_ids:(#{current_store_id})" if current_store_id
+      full_query += " AND store_ids:(#{@properties[:current_store_id]})" if @properties[:current_store_id]
 
       # Rails.logger.info "Solr Query: #{full_query}\nOptions: #{search_options}"
 
