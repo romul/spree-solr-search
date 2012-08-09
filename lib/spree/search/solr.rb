@@ -8,7 +8,7 @@ module Spree::Search
     def get_products_conditions_for(base_scope, query)
       facets = {
           :fields => PRODUCT_SOLR_FACETS,
-          :browse => @properties[:facets_hash].map{|k,v| "#{k}:#{v}"},
+          :browse => @properties[:facets].map{|k,v| "#{k}:#{v}"},
           :zeros => false 
       }
 
@@ -52,13 +52,14 @@ module Spree::Search
       rescue
       end
 
-      @properties[:facets] = parse_facets_hash(result.facets)
+      @properties[:available_facets] = parse_facets_hash(result.facets)
       base_scope.where(["spree_products.id IN (?)", products.map(&:id)])
     end
 
     def prepare(params)
       super
-      @properties[:facets_hash] = params[:facets] || {}
+      @properties[:facets] = params[:facets] || {}
+      @properties[:available_facets] = []
       @properties[:manage_pagination] = false
       @properties[:sort] = params[:sort] || nil
       # @properties[:order_by_price] = params[:order_by_price]
