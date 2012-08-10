@@ -58,6 +58,7 @@ module Spree::Search
 
     def prepare(params)
       super
+      @properties[:suggest] = nil
       @properties[:facets] = params[:facets] || {}
       @properties[:available_facets] = []
       @properties[:manage_pagination] = false
