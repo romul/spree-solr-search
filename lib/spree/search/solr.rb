@@ -27,7 +27,7 @@ module Spree::Search
 
       # Solr query parameters: http://wiki.apache.org/solr/CommonQueryParameters
       # Adding the keyword portions sctrictly if there is a word-character match
-      keyword_query = query and query.match(/\w/) and "#{query} AND "
+      keyword_query = (query and query.match(/\w/) and "#{query} AND ")
       full_query = "#{keyword_query}is_active:(true)"
       
       if taxon 
