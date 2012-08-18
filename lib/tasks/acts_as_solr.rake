@@ -1,6 +1,6 @@
 begin
   ENV['ONLY'] = "Spree::Product"
-  SOLR_PATH = ENV['SOLR_PATH']
+  SOLR_PATH = ENV['SOLR_PATH'] if ENV['SOLR_PATH'].present?
   RAILS_DEFAULT_LOGGER = Logger.new(Rails.root.join("log", Rails.env + ".log"))
   RAILS_ROOT = Rails.root.to_s unless defined?(RAILS_ROOT)
   require 'acts_as_solr_reloaded'
