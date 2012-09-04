@@ -41,7 +41,7 @@ module Spree::Search
         :filter_queries => filter_queries
       }
 
-      result = Spree::Product.find_by_solr(query, search_options)
+      result = Spree::Product.find_by_solr(query || '', search_options)
 
       products = result.records
 
