@@ -3,7 +3,7 @@ Solr Search
 
 ### Installation
 
-1. add `gem 'acts_as_solr_reloaded', :git => 'git://github.com/jumph4x/acts_as_solr_reloaded.git'` to your Gemfile (the canonical repo at http://github.com/dcrec1/acts_as_solr_reloaded suffered the regression again)
+1. add `gem 'acts_as_solr_reloaded', :git => 'git://github.com/dcrec1/acts_as_solr_reloaded.git'`
 1. Add `gem "spree_solr_search", :git => 'git://github.com/romul/spree-solr-search.git'` to your Gemfile
 1. Run `bundle install`
 1. Run `rails g spree_solr_search:install`
@@ -13,17 +13,18 @@ If you want use this extension with Spree 0.10.x or 0.11.x, then you should use 
     
 ### Usage
 
+To download, set up and start Solr 3.6:
+
+    bundle exec rake solr:download
+    bundle exec rake solr:start
+
 To perform the indexing:
 
-    rake solr:reindex BATCH=500
-
-To start Solr demo-server:
-
-    rake solr:start SOLR_PATH="/home/roman/www/jetty-solr"
+    bundle exec rake solr:reindex BATCH=500
 
 To stop Solr demo-server:
 
-    rake solr:stop
+    bundle exec rake solr:stop
     
 To configure production Solr server:
 
@@ -33,7 +34,3 @@ To configure production Solr server:
 ### Running rake tasks in background
 
 Read [instructions](https://gist.github.com/890215) how to run rake tasks in background.
-
-P.S. For development recommended use [jetty-solr](http://github.com/dcrec1/jetty-solr) server.
-
-

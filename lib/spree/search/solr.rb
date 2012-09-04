@@ -6,14 +6,6 @@ module Spree::Search
     # this means that any changes to the code will not take effect until the rails app is reloaded.
 
     def get_products_conditions_for(base_scope, query)
-      facets = {
-          :fields => PRODUCT_SOLR_FACETS,
-          :browse => @properties[:facets].map{|k,v| "#{k}:#{v}"},
-          :zeros => false 
-      }
-
-      # adding :scores => true here should return relevance scoring, but the underlying acts_as_solr library seems broken
-      search_options = {:facets => facets, :limit => 25000, :lazy => true}
 
       # the order option does not work... it generates the solr query request correctly
       # but the returned result.records are not ordered correctly
@@ -27,23 +19,31 @@ module Spree::Search
 
       # Solr query parameters: http://wiki.apache.org/solr/CommonQueryParameters
       # Adding the keyword portions sctrictly if there is a word-character match
-      keyword_query = (query and query.match(/\w/) and "#{query} AND ")
-      full_query = "#{keyword_query}is_active:(true)"
+      filter_queries  = ["is_active:(true)"]
       
       if taxon 
-        taxons_query = taxon.self_and_descendants.map{|t| "taxon_ids:(#{t.id})"}.join(" OR ")
-        full_query += " AND (#{taxons_query})"
+        filter_queries << taxon.self_and_descendants.map{|t| "taxon_ids:(#{t.id})"}.join(" OR ")
       end
       
-      full_query += " AND store_ids:(#{@properties[:current_store_id]})" if @properties[:current_store_id]
+      filter_queries << "store_ids:(#{@properties[:current_store_id]})" if @properties[:current_store_id]
 
-      # Rails.logger.info "Solr Query: #{full_query}\nOptions: #{search_options}"
+      facets = {
+          :fields => PRODUCT_SOLR_FACETS,
+          :browse => @properties[:facets].map{|k,v| "#{k}:#{v}"},
+          :zeros => false 
+      }
 
-      result = Spree::Product.find_by_solr(full_query, search_options)
+      # adding :scores => true here should return relevance scoring, but the underlying acts_as_solr library seems broken
+      search_options = {
+        :facets => facets,
+        :limit => 25000,
+        :lazy => true,
+        :filter_queries => filter_queries
+      }
+
+      result = Spree::Product.find_by_solr(query, search_options)
 
       products = result.records
-
-      # Rails.logger.info "Solr Response: #{result.records}"
 
       @properties[:products] = products
       @properties[:suggest] = nil
