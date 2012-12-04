@@ -1,20 +1,29 @@
 module Spree::Search
   class Solr < defined?(Spree::Core::Search::MultiDomain) ? Spree::Core::Search::MultiDomain :  Spree::Core::Search::Base
+  
+    def retrieve_products
+      if keywords.present?
+        find_products_by_solr(keywords)
+      else
+        @products_scope = get_base_scope
+        @products_scope.includes([:master]).page(page).per(per_page)
+      end
+    end
+  
     protected
 
     # NOTE: This class seems to loaded and init'd on rails startup
     # this means that any changes to the code will not take effect until the rails app is reloaded.
 
-    def get_products_conditions_for(base_scope, query)
+    def find_products_by_solr(query)
 
       # the order option does not work... it generates the solr query request correctly
       # but the returned result.records are not ordered correctly
-      # search_options.merge!(:order => (order_by_price == 'descend') ? "price desc" : "price asc")
+      # search_options.merge!(:sort => (order_by_price == 'descend') ? "price desc" : "price asc")
 
       # TODO: find a better place to put the PRODUCT_SORT_FIELDS instead of the global constant namespace
       if not @properties[:sort].nil? and PRODUCT_SORT_FIELDS.has_key? @properties[:sort]
         sort_option = PRODUCT_SORT_FIELDS[@properties[:sort]]
-        base_scope = base_scope.order("#{sort_option[0]} #{sort_option[1].upcase}")
       end
 
       # Solr query parameters: http://wiki.apache.org/solr/CommonQueryParameters
@@ -38,14 +47,18 @@ module Spree::Search
         :facets => facets,
         :limit => 25000,
         :lazy => true,
-        :filter_queries => filter_queries
+        :filter_queries => filter_queries,
+        :page => page, 
+        :per_page => per_page
       }
 
       result = Spree::Product.find_by_solr(query || '', search_options)
 
-      products = result.records
-
+      @count = result.total
+      @properties[:total_entries] = @count
+      products = Kaminari.paginate_array(result.records, :total_count => @count).page(page).per(per_page)
       @properties[:products] = products
+
       @properties[:suggest] = nil
       begin
         if suggest = result.suggest
@@ -56,7 +69,7 @@ module Spree::Search
       end
 
       @properties[:available_facets] = parse_facets_hash(result.facets)
-      base_scope.where(["spree_products.id IN (?)", products.map(&:id)])
+      Spree::Product.where("spree_products.id" => products.map(&:id))
     end
 
     def prepare(params)
@@ -78,7 +91,7 @@ module Spree::Search
         next if options.size <= 1
         facet = Facet.new(name.sub('_facet', ''))
         options.each do |value, count|
-          facet.options << FacetOption.new(value, count, facet.name)
+          facet.options << FacetOption.new(value, count, facet.name) if value.present?
         end
         facets << facet
       end
