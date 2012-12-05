@@ -8,7 +8,7 @@ Solr Search
 1. Run `bundle install`
 1. Run `rails g spree_solr_search:install`
 
-Master branch 1.0.x compatible.  
+Master branch 1.0.x - 1.2.x compatible.  
 If you want use this extension with Spree 0.10.x or 0.11.x, then you should use spree-0-11-stable branch.
     
 ### Usage
